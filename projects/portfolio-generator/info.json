@@ -1,0 +1,7 @@
+{
+  "name": "Portfolio Generator",
+  "description": "Автоматический генератор портфолио для разработчиков. Сканирует проекты, создает веб-страницу с карточками, поддерживает фильтрацию и поиск.",
+  "tags": ["python", "flask", "jinja2", "bootstrap", "web-development"],
+  "link": "https://github.com/yourusername/portfolio-generator"
+}
+

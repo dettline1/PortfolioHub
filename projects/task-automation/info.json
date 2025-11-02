@@ -1,0 +1,7 @@
+{
+  "name": "Task Automation Suite",
+  "description": "Набор скриптов для автоматизации повседневных задач: работа с файлами, email-рассылки, резервное копирование, мониторинг системы и уведомления.",
+  "tags": ["python", "automation", "scheduling", "email", "file-management"],
+  "link": "https://github.com/yourusername/task-automation"
+}
+

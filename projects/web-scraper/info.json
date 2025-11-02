@@ -1,0 +1,7 @@
+{
+  "name": "Advanced Web Scraper",
+  "description": "Мощный веб-скрапер с поддержкой JavaScript, прокси-серверов и автоматического обхода капчи. Поддерживает экспорт данных в CSV, JSON и базы данных.",
+  "tags": ["python", "selenium", "beautifulsoup", "web-scraping", "automation"],
+  "link": "https://github.com/yourusername/web-scraper"
+}
+

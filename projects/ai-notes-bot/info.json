@@ -1,0 +1,7 @@
+{
+  "name": "AI Notes Bot",
+  "description": "Телеграм-бот с искусственным интеллектом для создания конспектов и заметок. Использует OpenAI API для генерации структурированных резюме из текстов и аудио.",
+  "tags": ["python", "aiogram", "openai", "telegram-bot", "ai"],
+  "link": "https://github.com/yourusername/ai-notes-bot"
+}
+

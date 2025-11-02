@@ -1,0 +1,7 @@
+{
+  "name": "Data Analyzer Dashboard",
+  "description": "Интерактивная панель для анализа и визуализации больших данных. Поддерживает импорт из CSV, Excel, SQL баз данных. Автоматическая генерация графиков и статистики.",
+  "tags": ["python", "pandas", "matplotlib", "plotly", "data-science"],
+  "link": "https://github.com/yourusername/data-analyzer"
+}
+

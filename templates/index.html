@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center hero-content">
+                <h1 class="mb-4">{{ author.name }}</h1>
+                <p class="lead mb-4">{{ author.role }}</p>
+                <p class="mb-5">{{ author.description }}</p>
+                
+                <!-- Stats -->
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <h3>{{ total_projects }}</h3>
+                            <p>Проектов</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <h3>{{ total_stars }}</h3>
+                            <p>⭐ Звезд</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stats-card">
+                            <h3>{{ total_forks }}</h3>
+                            <p>🔱 Форков</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Social Links -->
+                <div class="social-links">
+                    {% if author.contacts.github %}
+                    <a href="{{ author.contacts.github }}" class="btn me-2 mb-2" target="_blank">
+                        <i class="bi bi-github me-2"></i>GitHub
+                    </a>
+                    {% endif %}
+                    {% if author.contacts.email %}
+                    <a href="mailto:{{ author.contacts.email }}" class="btn me-2 mb-2">
+                        <i class="bi bi-envelope me-2"></i>Email
+                    </a>
+                    {% endif %}
+                    {% if author.contacts.telegram %}
+                    <a href="https://t.me/{{ author.contacts.telegram.replace('@', '') }}" class="btn mb-2" target="_blank">
+                        <i class="bi bi-telegram me-2"></i>Telegram
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects" class="py-5">
+    <div class="container">
+        <h2 class="section-title mb-5">
+            Мои проекты
+        </h2>
+        
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <!-- Search -->
+            <form method="get" action="/" class="mb-4">
+                <div class="search-box d-flex">
+                    <input type="text" name="search" class="form-control flex-grow-1" 
+                           placeholder="Поиск по названию или описанию..." 
+                           value="{{ search_query or '' }}">
+                    <button class="btn" type="submit">
+                        <i class="bi bi-search me-2"></i>Поиск
+                    </button>
+                    {% if search_query or selected_tag or selected_language %}
+                    <a href="/" class="btn btn-outline-light ms-2">
+                        <i class="bi bi-x-circle"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </form>
+            
+            <!-- Language Filter -->
+            {% if all_languages %}
+            <div class="mb-3">
+                <div class="filter-tags">
+                    <span class="filter-label">
+                        <i class="bi bi-code-slash me-2"></i>Язык:
+                    </span>
+                    <a href="/" class="filter-tag {% if not selected_language %}active{% endif %}">
+                        Все
+                    </a>
+                    {% for language in all_languages %}
+                    <a href="?language={{ language }}" 
+                       class="filter-tag {% if selected_language == language %}active{% endif %}">
+                        {{ language }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Tags Filter -->
+            {% if all_tags %}
+            <div>
+                <div class="filter-tags">
+                    <span class="filter-label">
+                        <i class="bi bi-tags me-2"></i>Теги:
+                    </span>
+                    <a href="/" class="filter-tag {% if not selected_tag %}active{% endif %}">
+                        Все
+                    </a>
+                    {% for tag in all_tags[:15] %}
+                    <a href="?tag={{ tag }}" 
+                       class="filter-tag {% if selected_tag == tag %}active{% endif %}">
+                        {{ tag }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Sort Options -->
+            <div class="mt-3 text-center">
+                <div class="btn-group" role="group">
+                    <a href="?sort=updated{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if selected_language %}&language={{ selected_language }}{% endif %}" 
+                       class="btn btn-sm {% if sort_by == 'updated' %}btn-primary{% else %}btn-outline-light{% endif %}">
+                        <i class="bi bi-clock me-1"></i>Обновлено
+                    </a>
+                    <a href="?sort=stars{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if selected_language %}&language={{ selected_language }}{% endif %}" 
+                       class="btn btn-sm {% if sort_by == 'stars' %}btn-primary{% else %}btn-outline-light{% endif %}">
+                        <i class="bi bi-star me-1"></i>Звезды
+                    </a>
+                    <a href="?sort=name{% if selected_tag %}&tag={{ selected_tag }}{% endif %}{% if selected_language %}&language={{ selected_language }}{% endif %}" 
+                       class="btn btn-sm {% if sort_by == 'name' %}btn-primary{% else %}btn-outline-light{% endif %}">
+                        <i class="bi bi-sort-alpha-down me-1"></i>Имя
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        {% if projects %}
+        <div class="row g-4">
+            {% for project in projects %}
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card">
+                    <!-- Language Badge -->
+                    {% if project.language %}
+                    <span class="language-badge">{{ project.language }}</span>
+                    {% endif %}
+                    
+                    <div class="project-card-body">
+                        <h5 class="project-title">
+                            <i class="bi bi-folder-fill"></i>
+                            {{ project.name }}
+                        </h5>
+                        
+                        <p class="project-description">{{ project.description }}</p>
+                        
+                        <!-- Meta Info -->
+                        <div class="project-meta">
+                            {% if project.stars > 0 %}
+                            <div class="meta-item">
+                                <i class="bi bi-star-fill"></i>
+                                <span>{{ project.stars }}</span>
+                            </div>
+                            {% endif %}
+                            {% if project.forks > 0 %}
+                            <div class="meta-item">
+                                <i class="bi bi-diagram-3-fill"></i>
+                                <span>{{ project.forks }}</span>
+                            </div>
+                            {% endif %}
+                            {% if project.is_fork %}
+                            <div class="meta-item">
+                                <i class="bi bi-bezier2"></i>
+                                <span>Fork</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Tags -->
+                        {% if project.tags %}
+                        <div class="project-tags">
+                            {% for tag in project.tags[:6] %}
+                            <span class="project-tag">{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        <!-- GitHub Link -->
+                        {% if project.link %}
+                        <a href="{{ project.link }}" target="_blank" class="project-link">
+                            <i class="bi bi-github"></i>
+                            <span>View on GitHub</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <i class="bi bi-folder-x"></i>
+            <h3>Проекты не найдены</h3>
+            <p class="lead">
+                {% if search_query or selected_tag or selected_language %}
+                Попробуйте изменить критерии поиска
+                {% else %}
+                Добавьте проекты или проверьте настройки GitHub
+                {% endif %}
+            </p>
+            {% if search_query or selected_tag or selected_language %}
+            <a href="/" class="btn btn-primary mt-3">
+                <i class="bi bi-arrow-left me-2"></i>Сбросить фильтры
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- About Section -->
+<section id="about" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 mx-auto">
+                <div class="glass-strong p-5 rounded-4">
+                    <h2 class="text-white mb-4 text-center">
+                        <i class="bi bi-info-circle me-2"></i>О портфолио
+                    </h2>
+                    <p class="text-white-50 text-center lead">
+                        Все проекты автоматически синхронизируются с GitHub API.
+                        Обновления происходят каждый час или при перезагрузке страницы.
+                    </p>
+                    <div class="text-center mt-4">
+                        <a href="/api/refresh" class="btn btn-outline-light">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Обновить проекты
+                        </a>
+                        <a href="/api/projects" class="btn btn-outline-light ms-2" target="_blank">
+                            <i class="bi bi-code-square me-2"></i>API
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contacts Section -->
+<section id="contacts" class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mx-auto text-center">
+                <h2 class="text-white mb-5">Свяжитесь со мной</h2>
+                <div class="d-flex justify-content-center gap-3 flex-wrap">
+                    {% if author.contacts.github %}
+                    <a href="{{ author.contacts.github }}" class="btn btn-lg glass-strong text-white" target="_blank">
+                        <i class="bi bi-github me-2"></i>GitHub
+                    </a>
+                    {% endif %}
+                    {% if author.contacts.email %}
+                    <a href="mailto:{{ author.contacts.email }}" class="btn btn-lg glass-strong text-white">
+                        <i class="bi bi-envelope me-2"></i>Email
+                    </a>
+                    {% endif %}
+                    {% if author.contacts.telegram %}
+                    <a href="https://t.me/{{ author.contacts.telegram.replace('@', '') }}" class="btn btn-lg glass-strong text-white" target="_blank">
+                        <i class="bi bi-telegram me-2"></i>Telegram
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
