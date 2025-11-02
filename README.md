@@ -210,8 +210,8 @@ MIT License - используйте свободно для своих прое
 
 ## 📧 Контакты
 
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- GitHub: [@dettline](https://github.com/dettline1)
+- Email: shabanov.daniil.it@gmail.com
 
 ---
 
